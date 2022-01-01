@@ -2,7 +2,8 @@
 
 - create test-utils for wrapping components <Provider/>
 - first passing test using redux wrapper
-- fail -Invariant failed: You should not use <Redirect> outside a <Router>
+- pass -Invariant failed: You should not use <Redirect> outside a <Router>
+- returned {history} from render to assert against
 
 ## Popular Music Venue Client
 

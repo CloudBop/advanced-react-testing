@@ -17,6 +17,8 @@ test("greets current user", () => {
 });
 
 test("redirect is user === falsy", () => {
-  render(<UserProfile />);
-  expect(screen.queryByText(/hi/i)).not.toBeInTheDocument();
+  const { history } = render(<UserProfile />);
+  // expect(screen.queryByText(/hi/i)).not.toBeInTheDocument();
+  // asserting on history object
+  expect(history.location.pathname).toBe("/signin");
 });

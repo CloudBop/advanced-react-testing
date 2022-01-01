@@ -3,12 +3,15 @@ import {
   RenderOptions,
   RenderResult,
 } from "@testing-library/react";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, MemoryHistory } from "history";
 import { ReactElement } from "react";
 import { Provider } from "react-redux";
 import { Router } from "react-router";
 
 import { configureStoreWithMiddlewares, RootState } from "../app/store";
+
+// add the history for assertions
+type CustomRenderResult = RenderResult & { history: MemoryHistory };
 
 type CustomRenderOptions = {
   preloadedState?: RootState;
@@ -25,20 +28,26 @@ function render(
     initialRouteIndex,
     ...renderOptions
   }: CustomRenderOptions = {}
-): RenderResult {
+  //
+): CustomRenderResult {
+  //
+  const history = createMemoryHistory({
+    initialEntries: routeHistory,
+    initialIndex: initialRouteIndex,
+  });
+
   const Wrapper: React.FC = ({ children }) => {
     const store = configureStoreWithMiddlewares(preloadedState);
-    const history = createMemoryHistory({
-      initialEntries: routeHistory,
-      initialIndex: initialRouteIndex,
-    });
     return (
       <Provider store={store}>
         <Router history={history}>{children}</Router>
       </Provider>
     );
   };
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+  // the tree to assert on
+  const rtlRenderObject = rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+
+  return { ...rtlRenderObject, history };
 }
 //
 // overrule render method for testing redux provider
