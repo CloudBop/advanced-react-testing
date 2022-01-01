@@ -2,6 +2,7 @@
 
 - create test-utils for wrapping components <Provider/>
 - first passing test using redux wrapper
+- fail -Invariant failed: You should not use <Redirect> outside a <Router>
 
 ## Popular Music Venue Client
 

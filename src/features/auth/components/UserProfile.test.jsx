@@ -15,3 +15,8 @@ test("greets current user", () => {
     screen.getByText(/hi, booking@avalancheofcheese.com/i)
   ).toBeInTheDocument();
 });
+
+test("redirect is user === falsy", () => {
+  render(<UserProfile />);
+  expect(screen.queryByText(/hi/i)).not.toBeInTheDocument();
+});
