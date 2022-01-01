@@ -6,5 +6,5 @@ test("clicking sign-in button pushes '/sign-in' to history ", () => {
   const { history } = render(<NavBar />);
   const signInButton = screen.getByRole("button", { name: /sign in/i });
   fireEvent.click(signInButton);
-  expect(history.location.pathname).toBe("/sign-in");
+  expect(history.location.pathname).toBe("/signin");
 });
