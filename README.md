@@ -1,6 +1,7 @@
 # Boilerplate Starting Project
 
 - create test-utils for wrapping components <Provider/>
+- first passing test using redux wrapper
 
 ## Popular Music Venue Client
 
