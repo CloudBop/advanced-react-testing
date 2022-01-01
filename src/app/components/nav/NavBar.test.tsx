@@ -31,14 +31,14 @@ describe("display when signin/ not signed in", () => {
   };
   //
   test("display Sign in Button when user is null", () => {
-    // render(<NavBar />, { preloadedState: { user: null } });
-    render(<NavBar />);
+    render(<NavBar />, { preloadedState: { user: null } });
+    // render(<NavBar />);
     expect(
       screen.getByRole("button", { name: /sign in/i })
     ).toBeInTheDocument();
   });
   //
-  test("display Sign Out Button + user email when user is not null", () => {
+  test("display Sign Out Button + user email when user is truthy", () => {
     render(<NavBar />, { preloadedState: { user: { userDetails } } });
     expect(
       screen.getByRole("button", { name: /sign out/i })
