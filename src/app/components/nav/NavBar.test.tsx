@@ -18,6 +18,6 @@ test("Clicking sign-in button shows sign-in page", () => {
   fireEvent.click(signInButton);
   //
   expect(
-    screen.getByRole("heading", { name: /fail me first/i })
+    screen.getByRole("heading", { name: /Sign in to your account/i })
   ).toBeInTheDocument();
 });
