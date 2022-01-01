@@ -4,7 +4,7 @@
 - first passing test using redux wrapper
 - pass -Invariant failed: You should not use <Redirect> outside a <Router>
 - returned {history} from render to assert against
-- fail, behavioural/UI test.
+- pass, behavioural/UI test.
 
 ## Popular Music Venue Client
 

@@ -28,7 +28,7 @@ test("redirect is user === falsy", () => {
 test("view sign-in page when loading profile while not logged in", () => {
   render(<App />, { routeHistory: ["/profile"] });
   const heading = screen.getByRole("heading", {
-    name: /Login in to your account/i,
+    name: /Sign in to your account/i,
   });
   expect(heading).toBeInTheDocument();
 });
