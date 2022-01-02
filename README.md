@@ -6,6 +6,7 @@
 - returned {history} from render to assert against
 - pass, behavioural/UI test.
 - redux tests
+- msw tests including url queries
 
 ## Popular Music Venue Client
 
