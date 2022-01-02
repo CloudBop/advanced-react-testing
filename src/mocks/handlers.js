@@ -13,4 +13,9 @@ export const handlers = [
     // bandId is con convientently the index in the bands array
     return res(ctx.json({ band: bands[bandId] }));
   }),
+  rest.get(`${showsUrl}/:showId`, (req, res, ctx) => {
+    const { showId } = req.params;
+    // showId is con convientently the index in the bands array
+    return res(ctx.json({ show: shows[showId] }));
+  }),
 ];
