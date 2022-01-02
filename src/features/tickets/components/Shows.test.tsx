@@ -29,7 +29,8 @@ test("displays relevant show details for SOLD-OUT show", async () => {
   //
   render(<Shows />);
   const shows = await screen.findAllByRole("listitem");
-  const soldOutShow = shows[0];
+  // assert correct data!
+  const soldOutShow = shows[1];
   //
   const soldOutMessage = getByRole(soldOutShow, "heading", {
     name: /sold out/i,
@@ -37,13 +38,13 @@ test("displays relevant show details for SOLD-OUT show", async () => {
   expect(soldOutMessage).toBeInTheDocument();
   //
   const bandName = getByRole(soldOutShow, "heading", {
-    name: /the joyful nun riot/i,
+    name: /the joyous nun riot/i,
   });
   expect(bandName).toBeInTheDocument();
   //
   const bandDescription = getByText(
     soldOutShow,
-    /serious world music with an iconic musicial saw/i
+    /serious world music with an iconic musical saw/i
   );
   expect(bandDescription).toBeInTheDocument();
 });
