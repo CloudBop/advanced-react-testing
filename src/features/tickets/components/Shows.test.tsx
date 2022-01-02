@@ -63,8 +63,7 @@ test("redirects to correct tickets URL when 'tickets' is clicked", async () => {
 
   // async
   const ticketsBtn = await screen.findByRole("button", { name: /tickets/i });
-  // clicks on the first button foundByRole, should be ID:0 from the database
+  // clicks on the first button foundByRole, should be ID:0 -msw?
   fireEvent.click(ticketsBtn);
-  //
-  expect(history.location.pathname).toBe("tickets/0");
+  expect(history.location.pathname).toBe("/tickets/0");
 });
