@@ -1,4 +1,10 @@
-import { getByRole, getByText, render, screen } from "../../../test-utils";
+import {
+  fireEvent,
+  getByRole,
+  getByText,
+  render,
+  screen,
+} from "../../../test-utils";
 import { Shows } from "./Shows";
 
 // name: "Avalanche of Cheese",
@@ -47,4 +53,18 @@ test("displays relevant show details for SOLD-OUT show", async () => {
     /serious world music with an iconic musical saw/i
   );
   expect(bandDescription).toBeInTheDocument();
+});
+
+// unit test
+test("redirects to correct tickets URL when 'tickets' is clicked", async () => {
+  // const forceError = new Error("ERROR:FAKEFAIL TODO:REALFAIL");
+  // console.error(forceError);
+  const { history } = render(<Shows />);
+
+  // async
+  const ticketsBtn = await screen.findByRole("button", { name: /tickets/i });
+  // clicks on the first button foundByRole, should be ID:0 from the database
+  fireEvent.click(ticketsBtn);
+  //
+  expect(history.location.pathname).toBe("tickets/0");
 });

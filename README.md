@@ -7,6 +7,7 @@
 - pass, behavioural/UI test.
 - redux tests
 - msw tests including url queries
+- test router location updates with url params
 
 ## Popular Music Venue Client
 
