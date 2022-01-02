@@ -25,3 +25,25 @@ test("displays relevant show details for non-sold-out show", async () => {
   );
   expect(bandDescription).toBeInTheDocument();
 });
+test("displays relevant show details for SOLD-OUT show", async () => {
+  //
+  render(<Shows />);
+  const shows = await screen.findAllByRole("listitem");
+  const soldOutShow = shows[0];
+  //
+  const soldOutMessage = getByRole(soldOutShow, "heading", {
+    name: /sold out/i,
+  });
+  expect(soldOutMessage).toBeInTheDocument();
+  //
+  const bandName = getByRole(soldOutShow, "heading", {
+    name: /the joyful nun riot/i,
+  });
+  expect(bandName).toBeInTheDocument();
+  //
+  const bandDescription = getByText(
+    soldOutShow,
+    /serious world music with an iconic musicial saw/i
+  );
+  expect(bandDescription).toBeInTheDocument();
+});
