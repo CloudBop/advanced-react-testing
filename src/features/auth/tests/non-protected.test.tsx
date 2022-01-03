@@ -17,7 +17,7 @@ test.each([
 test.each([
   { routeName: "Home", routePath: "/", headingMatch: /welcome/i },
   { routeName: "Band 1", routePath: "/bands/1", headingMatch: /joyous/i },
-  { routeName: "Shows", routePath: "/shows", headingMatch: /upcoming shows /i },
+  { routeName: "Shows", routePath: "/shows", headingMatch: /upcoming shows/i },
 ])(
   // future jest release will allow $routeName
   `homepage does not redirect to login screen`,
