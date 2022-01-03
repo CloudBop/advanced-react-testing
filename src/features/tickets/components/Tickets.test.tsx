@@ -18,8 +18,8 @@ test("tickets page displays correct data for showId", async () => {
 //
 // asserts against showId query param
 test("'purchase' button pushes the correct URL", async () => {
-  const forceError = new Error("ERROR:FAKEFAIL TODO:REALFAIL");
-  console.error(forceError);
+  // const forceError = new Error("ERROR:FAKEFAIL TODO:REALFAIL");
+  // console.error(forceError);
 
   const { history } = render(<App />, {
     // has to be authenticated || redirects to signin
@@ -28,8 +28,14 @@ test("'purchase' button pushes the correct URL", async () => {
   });
 
   const purchaseBtn = await screen.findByRole("button", {
-    name: /purcahse/i,
+    name: /purchase/i,
   });
 
   fireEvent.click(purchaseBtn);
+
+  expect(history.location.pathname).toBe("/confirm/0");
+
+  // const history.
+  const searchRegex = expect.stringMatching(/holdId=\d+&seatCount=2/);
+  expect(history.location.search).toEqual(searchRegex);
 });
