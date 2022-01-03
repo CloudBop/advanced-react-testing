@@ -24,24 +24,24 @@ test.each([
   expect(signInHeader).toBeInTheDocument();
 });
 
-test("successful sign-in happyflowpath", async () => {
+test.each([
+  { testName: "sign in", buttonName: /sign in/i },
+  { testName: "sign up", buttonName: /sign up/i },
+])("successful $testName happyflowpath behaviours", async ({ buttonName }) => {
   // goto protected page
   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
-
   // sign in (after redirect)
   const emailField = screen.getByLabelText(/email/i);
   // userEvent.type(emailField, "test@test.com");
   userEvent.type(emailField, "booking@avalancheofcheese.com");
-  //
   const passwordField = screen.getByLabelText(/password/i);
-  // userEvent.type(passwordField, "test"); //  not testing server!
-  userEvent.type(passwordField, "iheartcheese"); //  not testing server!
+  userEvent.type(passwordField, "iheartcheese"); //  not testing server! see msw
 
   // <Form data-testid={"sign-in-form"} />
   const signInForm = screen.getByTestId("sign-in-form");
-  // ...in above component
+  // ...look in above component tree
   const signInButton = getByRole(signInForm, "button", {
-    name: /sign in/i,
+    name: buttonName,
   });
   userEvent.click(signInButton);
 
@@ -52,37 +52,65 @@ test("successful sign-in happyflowpath", async () => {
     // console.log(history);
     expect(history.entries).toHaveLength(1);
   });
-  //
 });
 
-test("successful sign-up happyflowpath", async () => {
-  // goto protected page
-  const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
+// test("successful sign-in happyflowpath", async () => {
+//   // goto protected page
+//   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
+//   // sign in (after redirect)
+//   const emailField = screen.getByLabelText(/email/i);
+//   // userEvent.type(emailField, "test@test.com");
+//   userEvent.type(emailField, "booking@avalancheofcheese.com");
+//   //
+//   const passwordField = screen.getByLabelText(/password/i);
+//   // userEvent.type(passwordField, "test"); //  not testing server!
+//   userEvent.type(passwordField, "iheartcheese"); //  not testing server!
 
-  // sign in (after redirect)
-  const emailField = screen.getByLabelText(/email/i);
-  // userEvent.type(emailField, "test@test.com");
-  userEvent.type(emailField, "booking@avalancheofcheese.com");
-  const passwordField = screen.getByLabelText(/password/i);
-  // userEvent.type(passwordField, "test"); //  not testing server!
-  userEvent.type(passwordField, "iheartcheese"); //  not testing server!
+//   // <Form data-testid={"sign-in-form"} />
+//   const signInForm = screen.getByTestId("sign-in-form");
+//   // ...in above component
+//   const signInButton = getByRole(signInForm, "button", {
+//     name: /sign in/i,
+//   });
+//   userEvent.click(signInButton);
 
-  // <Form data-testid={"sign-in-form"} />
-  // const signUpForm = screen.getByTestId("sign-in-form");
-  // ...in above component
+//   // async test assertions, we need to wait for response
+//   await waitFor(() => {
+//     expect(history.location.pathname).toBe("/tickets/1");
+//     // remove sign in from history
+//     // console.log(history);
+//     expect(history.entries).toHaveLength(1);
+//   });
+//   //
+// });
 
-  // ... only one on page
-  const signUpButton = screen.getByRole("button", {
-    name: /sign up/i,
-  });
-  userEvent.click(signUpButton);
+// test("successful sign-up happyflowpath", async () => {
+//   // goto protected page
+//   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
+//   // sign in (after redirect)
+//   const emailField = screen.getByLabelText(/email/i);
+//   // userEvent.type(emailField, "test@test.com");
+//   userEvent.type(emailField, "booking@avalancheofcheese.com");
+//   const passwordField = screen.getByLabelText(/password/i);
+//   // userEvent.type(passwordField, "test"); //  not testing server!
+//   userEvent.type(passwordField, "iheartcheese"); //  not testing server!
 
-  // async test assertions, we need to wait for response
-  await waitFor(() => {
-    expect(history.location.pathname).toBe("/tickets/1");
-    // remove sign in from history
-    // console.log(history);
-    expect(history.entries).toHaveLength(1);
-  });
-  //
-});
+//   // <Form data-testid={"sign-in-form"} />
+//   // const signUpForm = screen.getByTestId("sign-in-form");
+//   // ...in above component
+
+//   // ... only one on page
+//   const signUpButton = screen.getByRole("button", {
+//     name: /sign up/i,
+//   });
+//   userEvent.click(signUpButton);
+
+//   // async test assertions, we need to wait for response
+//   await waitFor(() => {
+//     expect(history.location.pathname).toBe("/tickets/1");
+//     // remove sign in from history
+//     // console.log(history);
+//     expect(history.entries).toHaveLength(1);
+//   });
+//   //
+// });
