@@ -1,7 +1,11 @@
 import userEvent from "@testing-library/user-event";
 
 import { App } from "../../../App";
-import { render, screen } from "../../../test-utils";
+import {
+  getByRole, //
+  render,
+  screen,
+} from "../../../test-utils";
 
 // test("redirects to signin from /profile when not authenticated", () => {
 //   render(<App />, { routeHistory: ["/profile"] });
@@ -30,10 +34,15 @@ test("successful sign-in happyflowpath", () => {
   const passwordField = screen.getByLabelText(/password/i);
   userEvent.type(passwordField, "reduntant-string"); //  not testing server!
 
-  const signInButton = screen.getByRole("button", { name: /sign in/i });
+  // <Form data-testid={"sign-in-form"} />
+  const signInForm = screen.getByTestId("sign-in-form");
+  const signInButton = getByRole(signInForm, "button", {
+    name: /sign in/i,
+  });
   userEvent.click(signInButton);
 
   //
   expect(history.location.pathname).toBe("/tickets/1");
   // remove sign in from history
+  console.log(history);
 });
