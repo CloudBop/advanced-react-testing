@@ -1,6 +1,17 @@
 import userEvent from "@testing-library/user-event";
+import {
+  DefaultRequestBody,
+  RequestParams,
+  ResponseComposition,
+  rest,
+  RestContext,
+  RestRequest,
+} from "msw";
 
 import { App } from "../../../App";
+import { baseUrl, endpoints } from "../../../app/axios/constants";
+import { handlers } from "../../../mocks/handlers";
+import { server } from "../../../mocks/server";
 import {
   getByRole, // assert from within tree
   render,
@@ -27,7 +38,7 @@ test.each([
 test.each([
   { testName: "sign in", buttonName: /sign in/i },
   { testName: "sign up", buttonName: /sign up/i },
-])("successful $testName happyflowpath behaviours", async ({ buttonName }) => {
+])("successful $testName happyflowpath", async ({ buttonName }) => {
   // goto protected page
   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
   // sign in (after redirect)
@@ -54,6 +65,88 @@ test.each([
   });
 });
 
+//
+const signInError = (
+  req: RestRequest<DefaultRequestBody, RequestParams>,
+  res: ResponseComposition, // <any>, - linter doesn't allow any
+  ctx: RestContext
+) => res(ctx.status(500)); // server error
+test("unsuccessful signin server error followed by successful signin happypathflow", async () => {
+  // overrule default server.handler
+  const errorHandler = rest.post(`${baseUrl}/${endpoints.signIn}`, signInError);
+  server.resetHandlers(...handlers, errorHandler);
+
+  //
+  // goto protected page
+  const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
+  // sign in (after redirect)
+  const emailField = screen.getByLabelText(/email/i);
+  userEvent.type(emailField, "booking@avalancheofcheese.com");
+  const passwordField = screen.getByLabelText(/password/i);
+  userEvent.type(passwordField, "iheartcheese"); //  not testing server! see msw handlers
+  // <Form data-testid={"sign-in-form"} />
+  const signInForm = screen.getByTestId("sign-in-form");
+  // ...look in above component tree
+  const signInButton = getByRole(signInForm, "button", {
+    name: /sign in/i,
+  });
+  // invoke errorHanlder fail
+  userEvent.click(signInButton);
+
+  //
+  //
+  server.resetHandlers();
+  userEvent.click(signInButton);
+  // async test assertions, we need to wait for response
+  await waitFor(() => {
+    expect(history.location.pathname).toBe("/tickets/1");
+    // remove sign in from history
+    // console.log(history);
+    expect(history.entries).toHaveLength(1);
+  });
+});
+
+const signInFailure = (
+  req: RestRequest<DefaultRequestBody, RequestParams>,
+  res: ResponseComposition, // <any>, - linter doesn't allow any
+  ctx: RestContext
+) => res(ctx.status(401));
+
+test("unsuccessful signin followed by successful signin happypathflow", async () => {
+  // overrule default server.handler
+  const errorHandler = rest.post(
+    `${baseUrl}/${endpoints.signIn}`,
+    signInFailure
+  );
+  //
+  server.resetHandlers(...handlers, errorHandler);
+
+  // goto protected page
+  const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
+  // sign in (after redirect)
+  const emailField = screen.getByLabelText(/email/i);
+  userEvent.type(emailField, "booking@avalancheofcheese.com");
+  const passwordField = screen.getByLabelText(/password/i);
+  userEvent.type(passwordField, "iheartcheese"); //  not testing server! see msw handlers
+  // <Form data-testid={"sign-in-form"} />
+  const signInForm = screen.getByTestId("sign-in-form");
+  // ...look in above component tree
+  const signInButton = getByRole(signInForm, "button", {
+    name: /sign in/i,
+  });
+  // initially fail
+  userEvent.click(signInButton);
+  // setup default
+  server.resetHandlers();
+  userEvent.click(signInButton);
+  // async test assertions, we need to wait for response
+  await waitFor(() => {
+    expect(history.location.pathname).toBe("/tickets/1");
+    // remove sign in from history
+    // console.log(history);
+    expect(history.entries).toHaveLength(1);
+  });
+});
 // test("successful sign-in happyflowpath", async () => {
 //   // goto protected page
 //   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });

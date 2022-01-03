@@ -9,6 +9,7 @@
 - msw tests including url queries
 - test router location updates with url/query params
 - tests authentication
+- parematerization - oops spelling
 
 ## Popular Music Venue Client
 
