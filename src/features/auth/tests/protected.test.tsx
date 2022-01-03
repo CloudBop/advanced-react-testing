@@ -2,9 +2,10 @@ import userEvent from "@testing-library/user-event";
 
 import { App } from "../../../App";
 import {
-  getByRole, //
+  getByRole, // assert from within tree
   render,
   screen,
+  waitFor,
 } from "../../../test-utils";
 
 // test("redirects to signin from /profile when not authenticated", () => {
@@ -23,26 +24,33 @@ test.each([
   expect(signInHeader).toBeInTheDocument();
 });
 
-test("successful sign-in happyflowpath", () => {
+test("successful sign-in happyflowpath", async () => {
   // goto protected page
   const { history } = render(<App />, { routeHistory: ["/tickets/1"] });
 
   // sign in (after redirect)
   const emailField = screen.getByLabelText(/email/i);
+  // userEvent.type(emailField, "test@test.com");
   userEvent.type(emailField, "booking@avalancheofcheese.com");
   //
   const passwordField = screen.getByLabelText(/password/i);
-  userEvent.type(passwordField, "reduntant-string"); //  not testing server!
+  // userEvent.type(passwordField, "test"); //  not testing server!
+  userEvent.type(passwordField, "iheartcheese"); //  not testing server!
 
   // <Form data-testid={"sign-in-form"} />
   const signInForm = screen.getByTestId("sign-in-form");
+  // ...in above component
   const signInButton = getByRole(signInForm, "button", {
     name: /sign in/i,
   });
   userEvent.click(signInButton);
 
+  // async test assertions, we need to wait for response
+  await waitFor(() => {
+    expect(history.location.pathname).toBe("/tickets/1");
+    // remove sign in from history
+    // console.log(history);
+    expect(history.entries).toHaveLength(1);
+  });
   //
-  expect(history.location.pathname).toBe("/tickets/1");
-  // remove sign in from history
-  console.log(history);
 });
