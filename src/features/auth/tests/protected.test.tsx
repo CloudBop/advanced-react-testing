@@ -65,15 +65,20 @@ test.each([
   });
 });
 
-//
-const signInError = (
+// sign in & signup
+const serverError = (
   req: RestRequest<DefaultRequestBody, RequestParams>,
   res: ResponseComposition, // <any>, - linter doesn't allow any
   ctx: RestContext
 ) => res(ctx.status(500)); // server error
+// const signInError = (
+//   req: RestRequest<DefaultRequestBody, RequestParams>,
+//   res: ResponseComposition, // <any>, - linter doesn't allow any
+//   ctx: RestContext
+// ) => res(ctx.status(500)); // server error
 test("unsuccessful signin server error followed by successful signin happypathflow", async () => {
   // overrule default server.handler
-  const errorHandler = rest.post(`${baseUrl}/${endpoints.signIn}`, signInError);
+  const errorHandler = rest.post(`${baseUrl}/${endpoints.signIn}`, serverError);
   server.resetHandlers(...handlers, errorHandler);
 
   //
@@ -110,7 +115,17 @@ const signInFailure = (
   req: RestRequest<DefaultRequestBody, RequestParams>,
   res: ResponseComposition, // <any>, - linter doesn't allow any
   ctx: RestContext
-) => res(ctx.status(401));
+) =>
+  res(
+    ctx.status(401),
+    ctx.json({ message: "Unauthorized Error is an HTTP status" })
+  );
+
+const signUpFailure = (
+  req: RestRequest<DefaultRequestBody, RequestParams>,
+  res: ResponseComposition, // <any>, - linter doesn't allow any
+  ctx: RestContext
+) => res(ctx.status(400), ctx.json({ message: "Email is already in use" }));
 
 test("unsuccessful signin followed by successful signin happypathflow", async () => {
   // overrule default server.handler
