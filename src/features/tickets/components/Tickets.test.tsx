@@ -35,7 +35,7 @@ test("'purchase' button pushes the correct URL", async () => {
 
   expect(history.location.pathname).toBe("/confirm/0");
 
-  // const history.
+  // regex of url query params history.location.search
   const searchRegex = expect.stringMatching(/holdId=\d+&seatCount=2/);
   expect(history.location.search).toEqual(searchRegex);
 });
