@@ -1,5 +1,6 @@
 import { rest } from "msw";
 
+import { baseUrl, endpoints } from "../app/axios/constants";
 import { bandUrl } from "../features/band/redux/bandApi";
 import { showsUrl } from "../features/tickets/redux/showApi";
 import { bands, shows } from "../test-utils/fake-data";
@@ -22,4 +23,19 @@ export const handlers = [
     //
     return res(ctx.status(200));
   }),
+  rest.post(`${baseUrl}/${endpoints.signIn}`, authHandler),
+  rest.post(`${baseUrl}/${endpoints.signUp}`, authHandler),
 ];
+
+function authHandler(req, res, ctx) {
+  const email = req.body;
+  return res(
+    ctx.join({
+      user: {
+        id: 123,
+        email,
+        token: "abc123",
+      },
+    })
+  );
+}
