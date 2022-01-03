@@ -28,9 +28,9 @@ export const handlers = [
 ];
 
 function authHandler(req, res, ctx) {
-  const email = req.body;
+  const { email } = req.body;
   return res(
-    ctx.join({
+    ctx.json({
       user: {
         id: 123,
         email,
